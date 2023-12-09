@@ -5,7 +5,6 @@ require_once('./helper/helperFunction.php');
 
 $sql = 'SELECT * FROM users';
 $result = $conn->query($sql);
-print_r($result);
 
 
 

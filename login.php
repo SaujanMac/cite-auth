@@ -2,6 +2,7 @@
 session_start();
 require_once('./config/db.php');
 require_once('./helper/helperFunction.php');
+require_once('./helper/redirect.php');
 // die('errr');
 
 if (isset($_POST['submit'])) {
@@ -42,10 +43,9 @@ if (isset($_POST['submit'])) {
 
   if ($result->num_rows === 1) {
     $_SESSION['auth']['username'] = $username;
-    header('location: ./dashboard.php');
+    redirect('./dashboard');
   } else {
     setFlashMessage('error', ' Invalid CREDENTIALS');
-    
   }
 }
 
@@ -64,10 +64,6 @@ if (isset($_POST['submit'])) {
 
 <body>
   <?php
-  require_once('./_partials/nav.php');
-  require_once('./_partials/nav.php');
-  require_once('./_partials/nav.php');
-  require_once('./_partials/nav.php');
   require_once('./_partials/nav.php');
   ?>
 

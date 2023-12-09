@@ -2,6 +2,8 @@
 
 require_once('./config/db.php');
 require_once('./helper/helperFunction.php');
+require_once('./helper/flash.php');
+require_once('./helper/redirect.php');
 
 if (isset($_POST['submit'])) {
   $username = $_POST['username'];
@@ -9,30 +11,39 @@ if (isset($_POST['submit'])) {
   $confirm_password = $_POST['confirm_password'];
 
   if ($password === $confirm_password) {
-    echo "matched";
+    // echo "matched";
     // CHeck user existence
     $sql = "SELECT * FROM users WHERE username = '$username';";
     $conn->query($sql);
 
     if ($conn->affected_rows == 0) {
       if ($conn->connect_errno == 0) {
-        echo "connected ";
+        // echo "connected ";
         echo $sql = "INSERT INTO users(username, password) VALUES('$username','$password');";
         $conn->query($sql);
         // print_r($conn);
-        echo "Data inserted successfully";
+        // setFlashMessage("success", "Data inserted successfully");
+        require_once('./config/sql.php');
+        $result = $conn->query($USER_EXISTENCE);
+
+        if ($result->num_rows === 1) {
+          $_SESSION['auth']['username'] = $username;
+          redirect('./dashboard');
+        } else {
+          setFlashMessage('error', ' Invalid CREDENTIALS');
+        }
       } else {
         die("error on connection");
       }
     } else {
-      echo "User already exists";
+      setFlashMessage("error", "Data not inserted");
     }
     // print_r($conn);
     // die;
     // print_r($conn);
 
   } else {
-    echo "not matched";
+    setFlashMessage("error", "Password didnt match");
   }
 }
 
